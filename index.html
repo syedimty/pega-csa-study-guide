@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pega CSA Study Guide</title>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div id="sidebar-header">
+    <div class="logo">Pega Academy · CSA</div>
+    <h1>Study Guide</h1>
+    <div class="stats" id="stats-text">48 Modules · System Architect</div>
+  </div>
+  <div id="nav-tabs">
+    <div class="nav-tab active" id="tab-study" onclick="switchTab('study')">📖 Study</div>
+    <div class="nav-tab" id="tab-quiz" onclick="switchTab('quiz')">🧠 Quiz</div>
+  </div>
+  <div id="search-box">
+    <input type="text" id="search-input" placeholder="🔍  Search modules..." oninput="filterModules(this.value)">
+  </div>
+  <div id="progress-bar-wrap">
+    <div class="plabel"><span>Studied</span><span id="prog-label">0 / 48</span></div>
+    <div id="progress-track"><div id="progress-fill"></div></div>
+  </div>
+  <div id="module-list"></div>
+  <div id="quiz-panel">
+    <div id="quiz-score-display">
+      <div style="font-size:10px;color:rgba(255,255,255,0.45);margin-bottom:4px;">BEST SCORE</div>
+      <span class="big" id="best-score-disp">—</span>
+      <span style="font-size:11px;color:rgba(255,255,255,0.45)"> / 100</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div id="topbar">
+    <button id="hamburger" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+    <div class="breadcrumb">Pega CSA &rsaquo; <span id="breadcrumb-title">Overview</span></div>
+    <div class="spacer"></div>
+    <button class="top-btn" id="mark-done-btn" onclick="toggleDone()">✓ Mark Done</button>
+    <button class="top-btn" id="quiz-this-btn" onclick="quizThisModule()" style="display:none">🧠 Quiz This Module</button>
+  </div>
+  <div id="content-area">
+
+    <!-- STUDY VIEW -->
+    <div id="study-view">
+      <div id="content-render">
+        <div id="welcome">
+          <div class="logo-text">Pega <span>CSA</span></div>
+          <p>Your complete study guide for the Pega Certified System Architect exam.<br>48 modules · 1,256 quiz questions · 60 questions to pass.</p>
+          <div class="welcome-grid">
+            <div class="wcard"><div class="n">48</div><div class="l">Modules</div></div>
+            <div class="wcard"><div class="n" id="total-topics-disp">—</div><div class="l">Topics</div></div>
+            <div class="wcard"><div class="n">1,256</div><div class="l">Quiz Questions</div></div>
+          </div>
+          <div class="welcome-btns">
+            <button class="wb-study" onclick="loadModule(0)">📖 Start Studying</button>
+            <button class="wb-quiz" onclick="switchTab('quiz')">🧠 Take a Quiz</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUIZ VIEW -->
+    <div id="quiz-view">
+
+      <!-- QUIZ HOME -->
+      <div id="quiz-home">
+        <h2>🧠 Quiz Mode</h2>
+        <div class="subtitle">1,256 questions auto-generated from your study guide. Add your own in <code>extra-questions.json</code>.</div>
+
+        <div class="quiz-mode-grid">
+          <div class="quiz-mode-card selected" id="mode-card-exam" onclick="selectMode('exam')">
+            <div class="icon">📋</div>
+            <h3>Exam Simulation</h3>
+            <p>60 questions, 90 min timer, mixed from all modules</p>
+          </div>
+          <div class="quiz-mode-card" id="mode-card-module" onclick="selectMode('module')">
+            <div class="icon">📚</div>
+            <h3>Module Quiz</h3>
+            <p>Focus on a specific module's questions</p>
+          </div>
+          <div class="quiz-mode-card" id="mode-card-random" onclick="selectMode('random')">
+            <div class="icon">🎲</div>
+            <h3>Quick Practice</h3>
+            <p>Pick a custom number of random questions</p>
+          </div>
+        </div>
+
+        <div class="quiz-settings">
+          <h3>Settings</h3>
+          <div class="setting-row" id="setting-module-row" style="display:none">
+            <label>Module</label>
+            <select id="module-select" style="flex:1;max-width:320px"></select>
+          </div>
+          <div class="setting-row">
+            <label>Questions</label>
+            <input type="range" id="q-count-slider" min="5" max="60" value="20" oninput="document.getElementById('q-count-val').textContent=this.value">
+            <span class="q-count-label" id="q-count-val">20</span>
+          </div>
+          <div class="setting-row">
+            <label>Question type</label>
+            <select id="q-type-filter">
+              <option value="all">All types (MCQ + True/False)</option>
+              <option value="mcq">Multiple choice only</option>
+              <option value="tf">True/False only</option>
+            </select>
+          </div>
+          <div class="setting-row" id="timer-row">
+            <label>Timer</label>
+            <select id="timer-select">
+              <option value="0">No timer</option>
+              <option value="90">90 minutes (exam)</option>
+              <option value="30">30 minutes</option>
+              <option value="10">10 minutes</option>
+            </select>
+          </div>
+        </div>
+        <button class="start-quiz-btn" onclick="startQuiz()">▶ Start Quiz</button>
+      </div>
+
+      <!-- QUIZ RUNNER -->
+      <div id="quiz-runner" style="display:none">
+        <div id="quiz-header">
+          <span id="quiz-progress-text">Q 1 / 20</span>
+          <div id="quiz-progress-bar-wrap">
+            <div id="quiz-progress-bar-track"><div id="quiz-progress-bar-fill" style="width:5%"></div></div>
+          </div>
+          <span id="quiz-score-inline">Score: 0</span>
+          <span id="quiz-timer-disp" style="font-size:12px;font-weight:700;color:var(--pega-blue);min-width:48px;text-align:right;display:none"></span>
+          <button id="quiz-exit-btn" onclick="exitQuiz()">✕ Exit</button>
+        </div>
+        <div id="quiz-body">
+          <div class="q-card">
+            <div class="q-meta" id="q-meta"></div>
+            <div class="q-text" id="q-text"></div>
+            <div class="options-list" id="options-list"></div>
+            <div class="explanation-box" id="explanation-box"></div>
+            <div id="quiz-nav">
+              <button id="btn-submit" onclick="submitAnswer()">Submit</button>
+              <button id="btn-next" onclick="nextQuestion()">Next →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTS -->
+      <div id="quiz-results">
+        <div class="results-card">
+          <div class="big-score" id="result-score-pct">—%</div>
+          <div class="score-label" id="result-score-label">0 correct out of 0</div>
+          <div class="pass-badge" id="result-badge">—</div>
+          <div class="result-stats">
+            <div class="rs"><div class="n" id="r-correct" style="color:var(--green)">0</div><div class="l">Correct ✓</div></div>
+            <div class="rs"><div class="n" id="r-wrong" style="color:var(--red)">0</div><div class="l">Wrong ✗</div></div>
+            <div class="rs"><div class="n" id="r-total">0</div><div class="l">Total</div></div>
+          </div>
+        </div>
+        <div class="results-actions">
+          <button class="btn-retry" onclick="retryQuiz()">↺ Retry</button>
+          <button class="btn-home" onclick="showQuizHome()">◀ Back</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "pega-course",
+  "version": "1.0.0",
+  "description": "This comprehensive study guide covers all 48 modules from the Pega Academy CSA (Certified System Architect) curriculum. Each module has been distilled into a focused markdown file containing key concepts, learning objectives, and exam tips.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^8.0.3"
+  },
+  "dependencies": {
+    "marked": "^17.0.5"
+  }
+}
