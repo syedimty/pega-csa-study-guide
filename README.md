@@ -1,5 +1,7 @@
 # Pega CSA Study Guide - Complete 48 Module Course
 
+🚀 **Live Site**: [https://syedimty.github.io/pega-csa-study-guide/](https://syedimty.github.io/pega-csa-study-guide/)
+
 This comprehensive study guide covers all 48 modules from the Pega Academy CSA (Certified System Architect) curriculum. Each module has been distilled into a focused markdown file containing key concepts, learning objectives, and exam tips.
 
 ## Course Structure
