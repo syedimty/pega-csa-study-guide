@@ -1,3 +1,21 @@
+
+ClipboardPage workPage = tools.findPage("pyWorkPage");
+
+ParameterPage ppParams = new ParameterPage();
+ppParams.putString("RuleType", "Rule-Obj-Property");
+ppParams.putString("RuleName", "AddressLine1");
+ppParams.putString("AppliesToClass", "PegaFS-Data-Party");
+
+ClipboardPage resultPage = tools.findPage("D_ReferencingRules", ppParams);
+
+if (resultPage != null) {
+    workPage.putString(".TestResult", resultPage.getString("pxResultCount"));
+} else {
+    workPage.putString(".TestResult", "NULL");
+}
+
+
+
 ClipboardPage workPage = tools.findPage("pyWorkPage");
 
 ParameterPage ppParams = new ParameterPage();
