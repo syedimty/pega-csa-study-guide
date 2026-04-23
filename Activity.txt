@@ -1,3 +1,18 @@
+ClipboardPage workPage = tools.findPage("pyWorkPage");
+
+ParameterPage ppParams = new ParameterPage();
+ppParams.putString("RuleType", "Rule-Obj-Property");
+ppParams.putString("RuleName", "AddressLine1");
+ppParams.putString("AppliesToClass", "PegaFS-Data-Party");
+
+ClipboardPage resultPage = tools.findDataPage("D_ReferencingRules", ppParams);
+
+if (resultPage != null) {
+    workPage.putString(".TestResult", resultPage.getString("pxResultCount"));
+} else {
+    workPage.putString(".TestResult", "NULL");
+}
+
 import com.pega.pegarules.pub.clipboard.ClipboardPage;
 import com.pega.pegarules.pub.clipboard.ClipboardPages;
 import com.pega.pegarules.pub.context.ThreadContainer;
